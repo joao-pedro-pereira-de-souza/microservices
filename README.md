@@ -27,3 +27,21 @@ O fluxo entre os containers é simples, na API é criado um novo job com bull co
 * bull
 * conexão com container CACHE
 * conexão com container DATABASE
+
+### BRANCHS
+
+### API
+```
+API-`NUMBER BRANCH`
+```
+
+### JOB
+```
+JOB-`NUMBER BRANCH`
+```
+
+
+### DOCKER
+```
+DOCKER-`NUMBER BRANCH`
+```
