@@ -34,6 +34,11 @@
       "@middlewares/*": ["src/middlewares/*"],
       "@utils/*": ["src/utils/*"],
       "@functions/*": ["src/functions/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@routes/*": ["src/routes/*"],
+      "@configs/*": ["src/configs/*"],
+      "@database/*": ["src/database/*"],
       "@root/*": ["./*"],
     },
     "resolveJsonModule": true,                        /* Enable importing .json files. */
