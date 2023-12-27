@@ -39,6 +39,8 @@
       "@routes/*": ["src/routes/*"],
       "@configs/*": ["src/configs/*"],
       "@database/*": ["src/database/*"],
+      "@schemas/*": ["src/schemas/*"],
+      "@validations/*": ["src/validations/*"],
       "@root/*": ["./*"],
     },
     "resolveJsonModule": true,                        /* Enable importing .json files. */

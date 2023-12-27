@@ -22,6 +22,8 @@ module.exports = {
           "@routes": "./src/routes",
           "@configs": "./src/configs",
           "@interfaces": "./src/interfaces",
+          "@schemas": "./src/schemas",
+          "@validations": "./src/validations",
           "@root": "./",
         },
       },

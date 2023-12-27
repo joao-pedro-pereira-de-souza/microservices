@@ -1,10 +1,12 @@
 import { Router } from 'express';
 
-import RoutesReports from '@routes/reportsRoute';
+import ReportsRoutes from '@routes/reportsRoutes';
+import TemplatesRoutes from '@routes/templatesRoutes';
 
 
-const Routes = (app) => {
-   RoutesReports(app);
+const Routes = (app: Router) => {
+   ReportsRoutes(app);
+   TemplatesRoutes(app);
 }
 
 export default Routes

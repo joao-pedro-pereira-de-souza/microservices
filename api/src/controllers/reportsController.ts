@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import ConvertDocument from '@functions/convertDocuments';
+
+import TemplateDocuments from '@functions/templateDocuments';
 
 interface UsersInterface {
    name: string,
@@ -14,7 +15,7 @@ interface BodyReportUsersInterface {
    users: UsersInterface[]
 }
 
-const reportUsers = async (req: Request<undefined, undefined, BodyReportUsersInterface, undefined>, res: Response, next: NextFunction) => {
+const reportUsers = async (req: Request<any, any, BodyReportUsersInterface, any>, res: Response, next: NextFunction) => {
 
 	try {
 
@@ -25,7 +26,7 @@ const reportUsers = async (req: Request<undefined, undefined, BodyReportUsersInt
 			output: 'test'
 		}
 
-		await ConvertDocument.convertPdfToDocx(paramsConvertPdfToDocx)
+		await TemplateDocuments.useTemplate();
 
 		return res.status(200).json({
 			status: 200,
