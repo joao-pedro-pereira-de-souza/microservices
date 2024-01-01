@@ -2,15 +2,17 @@ import { Request, Response, NextFunction } from 'express';
 
 import knex from '@database/connection';
 
-import {CreateTemplateInterface, CreateTemplateSchema} from '@schemas/TemplateSchema';
+import {
+   CreateTemplateInterface as BodyCreateInterface,
+   CreateTemplateSchema
+} from '@schemas/TemplateSchema';
 import { validate } from '@validations/validation';
 
 
-const create = async (req: Request<any, any, CreateTemplateInterface, any>, res: Response, next: NextFunction) => {
+const create = async (req: Request<any, any, BodyCreateInterface, any>, res: Response, next: NextFunction) => {
    try {
 
       const dataValidation = req.body;
-
       const responseValidation = await validate(CreateTemplateSchema, dataValidation);
       if (responseValidation.notSuccess) {
          return res.status(422).json(responseValidation.response);

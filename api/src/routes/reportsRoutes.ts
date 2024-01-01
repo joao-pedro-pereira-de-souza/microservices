@@ -3,7 +3,7 @@ import { Router } from 'express';
 import ReportsController from '@controllers/reportsController';
 
 const Reports = (app: Router) => {
-   app.get('/reports', ReportsController.reportUsers)
+   app.post('/reports', ReportsController.reportUsers)
 
 }
 

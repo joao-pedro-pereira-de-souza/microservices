@@ -2,13 +2,25 @@
 
 import { mkdtemp, mkdir } from 'fs/promises';
 import path from 'path';
+import fs from 'fs';
+import { writeFile } from 'fs/promises';
 
 import { ResponseFunctionsInterface } from '@interfaces/responses';
 
+import { GetBufferFile } from '@utils/requestHttp';
 
+interface ParamsUseTemplateInterface {
+   file_url: string;
+}
+
+interface PromiseSetupFolderTempInterface extends ResponseFunctionsInterface {
+   data?: {
+      path: string;
+   }
+}
 export default class {
 
-   private static async setupFolderTemp(): Promise<ResponseFunctionsInterface> {
+   private static async setupFolderTemp(): Promise<PromiseSetupFolderTempInterface> {
 
 		try {
 
@@ -19,7 +31,7 @@ export default class {
 			const folderTemp = await mkdtemp(pathTemp + '/');
 			return {
 				success: true,
-				data: folderTemp
+				data: { path: folderTemp }
 			}
 
 		} catch (error) {
@@ -33,9 +45,13 @@ export default class {
 	}
 
 
-   static async useTemplate(): Promise<ResponseFunctionsInterface>  {
+   static async useTemplate(params: ParamsUseTemplateInterface): Promise<ResponseFunctionsInterface>  {
 
       try {
+
+         const { file_url } = params;
+
+         const fullNamePdfTemplate = 'template.pdf';
 
          const responsePathTemp = await this.setupFolderTemp();
          if (!responsePathTemp.success) {
@@ -46,6 +62,16 @@ export default class {
                   error
                }
          }
+
+         const paramsGetBufferFile = {
+            url: file_url
+         }
+         const responsePdfBuffer = await GetBufferFile(paramsGetBufferFile)
+         if (!responsePdfBuffer.success) {
+            return responsePdfBuffer
+         }
+
+         await writeFile(`${responsePathTemp.data?.path}/${fullNamePdfTemplate}`, responsePdfBuffer.data?.buffer as Buffer);
 
          return {
             success: true
