@@ -8,9 +8,7 @@ import {
 	UseReportInterface as BodyUseReportInterface,
 	UseReportSchema
 } from '@schemas/ReportSchema';
-import {
-   CreateTemplateInterface as BodyCreateInterface
-} from '@schemas/TemplateSchema';
+
 
 import { validate } from '@validations/validation';
 
@@ -42,7 +40,8 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
 		}
 
 		const paramsTemplateDocument = {
-			file_url: findTemplate.template_url
+			file_url: findTemplate.template_url,
+			data
 		}
 
 
