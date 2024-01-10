@@ -1,5 +1,5 @@
 import { ZodSchema } from 'zod';
-import { IZodIssue } from '@interfaces/ZodIssue';
+import { IZodIssue } from '@interfaces/zodIssue';
 
 export type IResponseZodValidation = {
     notSuccess: boolean;

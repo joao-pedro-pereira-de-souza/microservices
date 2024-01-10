@@ -7,7 +7,7 @@ import TemplateDocuments from '@functions/templateDocuments';
 import {
 	UseReportInterface as BodyUseReportInterface,
 	UseReportSchema
-} from '@schemas/ReportSchema';
+} from '@schemas/reportSchema';
 
 
 import { validate } from '@validations/validation';

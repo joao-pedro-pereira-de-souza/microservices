@@ -5,7 +5,7 @@ import knex from '@database/connection';
 import {
    CreateTemplateInterface as BodyCreateInterface,
    CreateTemplateSchema
-} from '@schemas/TemplateSchema';
+} from '@schemas/templateSchema';
 import { validate } from '@validations/validation';
 
 

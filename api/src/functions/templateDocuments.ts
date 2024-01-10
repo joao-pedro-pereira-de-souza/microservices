@@ -139,7 +139,22 @@ export default class {
             file: responseConvertPdfToXml.data?.file as Buffer,
             data
          }
+
          await this.replaceDocument(paramsReplaceDocument)
+
+         const paramsConvertDocumentXmlToPdf = {
+            input_file: responseConvertPdfToXml.data?.output as string,
+            output: sourceTemplate
+         }
+
+         const responseConvertXmlToPdf = await ConvertDocument.convertXmlToPdf(paramsConvertDocumentXmlToPdf);
+         if (!responseConvertXmlToPdf.success) {
+            return {
+               success: false,
+               message: responseConvertXmlToPdf.message
+            }
+
+         }
 
          return {
             success: true
