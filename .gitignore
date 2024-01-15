@@ -1,0 +1,11 @@
+
+
+api/node_modules/*
+api/dist/*
+api/.env
+api/src/temp/*
+api/src/temp/*
+api/uploads/*
+scriptDockerDatabaseTest.txt
+
+job/node_modules/*

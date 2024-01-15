@@ -1,0 +1,12 @@
+{
+  "not authorized": {
+    "status": 401,
+    "message": "Sua solicitação não foi autorizada.",
+    "data": null
+  },
+  "Token expired": {
+    "status": 401,
+    "message": "Sua sessão foi encerrada, efetua o login novamente.",
+    "data": null
+  }
+}
