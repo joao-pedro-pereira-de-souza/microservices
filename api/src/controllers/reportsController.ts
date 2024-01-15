@@ -4,6 +4,8 @@ import knex from '@database/connection';
 
 import TemplateDocuments from '@functions/templateDocuments';
 
+import jobs from '@jobs/index';
+
 import {
 	UseReportInterface as BodyUseReportInterface,
 	UseReportSchema
@@ -57,6 +59,12 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
 		}
 
 
+		const paramsJob = {
+			file_url: findTemplate.template_url,
+			data
+		}
+
+		jobs.queueUseTemplate.add(paramsJob);
 
 		return res.status(200).json({
 			status: 200,
