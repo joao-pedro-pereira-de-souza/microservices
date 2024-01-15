@@ -1,15 +1,15 @@
 
-import {exec, execSync} from 'child_process';
+import {exec } from 'child_process';
 import { promisify } from 'util';
-import { mkdtemp, mkdir } from 'fs/promises'
 import { readFileSync } from 'fs';
-
-import path from 'path'
-
-
 
 import { ResponseFunctionsInterface } from '@interfaces/responses';
 
+interface PromiseConvertXmlToPdfInterface extends ResponseFunctionsInterface {
+	data?: {
+		file: Buffer
+	}
+}
 
 interface ParamsDataConvertInterface {
 	output: string,
@@ -35,95 +35,9 @@ interface ResponseSofficeGetOutput extends ResponseFunctionsInterface {
 	}
 }
 
-// algoritmo :
-// 01 converter pdf para xml (soffice --headless --convert-to xml template.pdf)
-// 02 manipular as variáveis do xml
-// 03 converter o xml para pdf (soffice --headless --convert-to pdf template.xml)
-// 04 efetuar o upload do novo pdf
 export default  class {
 
 	static execPromise = promisify(exec);
-
-
-	// private static async setupFolderTemp(): Promise<ResponseFunctionsInterface> {
-
-	// 	try {
-
-	// 		const pathTemp = path.resolve(path.dirname(__dirname), 'temp');
-
-	// 		await mkdir(pathTemp, { recursive: true });
-
-	// 		const folderTemp = await mkdtemp(pathTemp + '/');
-	// 		return {
-	// 			success: true,
-	// 			data: folderTemp
-	// 		}
-
-	// 	} catch (error) {
-	// 		return {
-
-	// 			success: false,
-	// 			error,
-	// 			message: 'Ocorreu um erro ao converter docx em html'
-	// 		}
-	// 	}
-	// }
-
-	// /home/joao/Downloads/testelibreoffice/02/
-
-	// soffice --headless --convert-to xml ${path}
-	// static async convertPdfToDocx (params: ParamsDefaultConvertDocumentInterface) : Promise<ResponseFunctionsInterface>{
-
-	// 	try {
-	// 		const { input, output } = params;
-
-
-
-	// 		const script = `libreoffice --invisible --infilter="writer_pdf_import" --convert-to docx:"MS Word 2007 XML" --outdir ${output} ${input}`
-	// 		return {
-	// 			success: true,
-	// 		}
-	// 	} catch (error) {
-	// 		return {
-	// 			success: false,
-	// 			error,
-	// 			message: 'Ocorreu um erro ao converter pdf em docx'
-	// 		}
-	// 	}
-
-	// }
-
-	// static async convertDocxToHtml(params: ParamsDefaultConvertDocumentInterface): Promise<ResponseFunctionsInterface> {
-
-	// 	try {
-	// 		const { input, output } = params;
-
-	// 		const script = `pdftohtml -c -s ${input} ${output}`;
-
-	// 		const { stderr, stdout } = await this.execPromise(script);
-
-	// 		if (stderr) {
-	// 			return {
-	// 				success: false,
-	// 				error: stderr,
-	// 				message: stderr
-	// 			}
-	// 		}
-	// 		return {
-	// 			success: true,
-	// 			data: {stdout}
-	// 		}
-	// 	} catch (error) {
-
-	// 		return {
-	// 			success: false,
-	// 			error,
-	// 			message: 'Ocorreu um erro ao converter docx em html'
-	// 		}
-	// 	}
-
-
-	// }
 
 	private static sofficeGetOutput(params: ParamsSofficeGetOutputInterface) : ResponseSofficeGetOutput {
 		try {
@@ -203,7 +117,7 @@ export default  class {
 	}
 
 
-	static async convertXmlToPdf(params: ParamsDefaultConvertDocumentInterface) : Promise<ResponseFunctionsInterface>{
+	static async convertXmlToPdf(params: ParamsDefaultConvertDocumentInterface) : Promise<PromiseConvertXmlToPdfInterface>{
 		try {
 
 			const { input_file, output } = params;
@@ -238,7 +152,6 @@ export default  class {
 			return {
 				success: true,
 				data: {
-					output: sourceFilePdf,
 					file: filePdf
 				}
 			}

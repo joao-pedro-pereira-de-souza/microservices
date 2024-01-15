@@ -5,6 +5,8 @@ import path from 'path';
 
 import { writeFile } from 'fs/promises';
 
+import { rmSync } from 'fs'
+
 import { ResponseFunctionsInterface } from '@interfaces/responses';
 
 import { GetBufferFile } from '@utils/requestHttp';
@@ -27,6 +29,15 @@ interface ParamsReplaceDocumentInterface {
    data: any,
 }
 
+interface ParamsDropFolderInterface {
+   source: string
+}
+
+interface PromiseUseTemplateInterface extends ResponseFunctionsInterface {
+   data?: {
+      pdf: Buffer
+   }
+}
 export default class {
 
    private static async setupFolderTemp(): Promise<PromiseSetupFolderTempInterface> {
@@ -53,6 +64,24 @@ export default class {
 		}
 	}
 
+   private static rmFolder(params: ParamsDropFolderInterface): ResponseFunctionsInterface {
+      try {
+
+         const { source } = params;
+
+         rmSync(source, {recursive: true, force: true});
+
+         return {
+            success: true
+         }
+      } catch (error) {
+         return {
+            success: false,
+            error,
+            message: 'Ocorreu um erro ao deletar a pasta do template usado.'
+         }
+      }
+   }
 
    private static async replaceDocument(params: ParamsReplaceDocumentInterface):  Promise<ResponseFunctionsInterface>  {
       try {
@@ -88,7 +117,8 @@ export default class {
       }
    }
 
-   static async useTemplate(params: ParamsUseTemplateInterface): Promise<ResponseFunctionsInterface>  {
+
+   static async useTemplate(params: ParamsUseTemplateInterface): Promise<PromiseUseTemplateInterface>  {
 
       try {
 
@@ -111,7 +141,10 @@ export default class {
          }
          const responsePdfBuffer = await GetBufferFile(paramsGetBufferFile)
          if (!responsePdfBuffer.success) {
-            return responsePdfBuffer
+            return {
+               success: false,
+               message: responsePdfBuffer.message
+            }
          }
 
          const sourceTemplate = `${responsePathTemp.data?.path}/`
@@ -153,11 +186,19 @@ export default class {
                success: false,
                message: responseConvertXmlToPdf.message
             }
-
          }
 
+         const paramsRmFolder = {
+            source: responsePathTemp.data?.path as string
+         }
+
+         this.rmFolder(paramsRmFolder)
+
          return {
-            success: true
+            success: true,
+            data: {
+               pdf: responseConvertXmlToPdf.data?.file as Buffer,
+            }
          }
 
       } catch (error) {

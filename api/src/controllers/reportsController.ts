@@ -56,11 +56,13 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
 			return res.status(response.status).json(response);
 		}
 
+
+
 		return res.status(200).json({
 			status: 200,
 			message: 'Users successfully',
 			data: {
-				teste: '1'
+				buffer: responseUseTemplate.data?.pdf
 			}
 		});
 
