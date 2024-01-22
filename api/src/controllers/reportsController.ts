@@ -58,19 +58,16 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
 			return res.status(response.status).json(response);
 		}
 
+		const job = await jobs.queueUseTemplate.add(paramsTemplateDocument);
 
-		const paramsJob = {
-			file_url: findTemplate.template_url,
-			data
-		}
-
-		jobs.queueUseTemplate.add(paramsJob);
 
 		return res.status(200).json({
 			status: 200,
 			message: 'Users successfully',
 			data: {
-				buffer: responseUseTemplate.data?.pdf
+				buffer: responseUseTemplate.data?.pdf,
+				job_id: job.id,
+				data: job.data
 			}
 		});
 

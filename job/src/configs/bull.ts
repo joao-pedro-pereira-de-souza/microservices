@@ -11,15 +11,6 @@ const AllJobs = Object.values(jobs).map((queue) => {
 
 
 export default {
-   addJob(job_name: string, data: any) {
-
-      const queue = AllJobs.find(queue => queue.name === job_name);
-
-      if (queue) {
-         queue.add(data);
-      }
-
-   },
    process() {
       AllJobs.forEach(queue => {
 
