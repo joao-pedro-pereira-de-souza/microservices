@@ -1,4 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
+import fs from 'fs';
 
 import knex from '@database/connection';
 
@@ -14,11 +15,11 @@ import {
 
 import { validate } from '@validations/validation';
 
-const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, res: Response, next: NextFunction) => {
+const reportUsers = async (req: Request<any, any, any, any>, res: Response, next: NextFunction) => {
 
 	try {
 
-		const { id_template, data } = req.body;
+		const { id_template, data } = req.body?.data ? JSON.parse(req.body.data) : null;
 
 		const dataValidation = req.body;
       const responseValidation = await validate(UseReportSchema, dataValidation);
@@ -26,36 +27,43 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
          return res.status(422).json(responseValidation.response);
       }
 
+		let file: string | Buffer | null = null;
 
-		const whereTemplate = { id: id_template };
-		console.log(whereTemplate);
-		const findTemplate = await knex('templates').where(whereTemplate).first();
-		if (!findTemplate) {
+		if (id_template) {
+			const whereTemplate = { id: id_template };
+			console.log(whereTemplate);
+			const findTemplate = await knex('templates').where(whereTemplate).first();
+			if (!findTemplate) {
 
-			const response = {
-				status: 404,
-				message: 'Template not found',
-				data: null
+				const response = {
+					status: 404,
+					message: 'Template not found',
+					data: null
+				}
+
+				return res.status(response.status).json(response);
 			}
 
+			file = findTemplate.template_url
+		}
+
+		if (req.file?.buffer) {
+			file = req.file?.buffer
+		}
+
+		if (!file) {
+
+			const response = {
+				status: 422,
+				message: 'Arquivo não encontrado.',
+				data: null
+			}
 			return res.status(response.status).json(response);
 		}
 
 		const paramsTemplateDocument = {
-			file_url: findTemplate.template_url,
+			file,
 			data
-		}
-
-
-		const responseUseTemplate = await TemplateDocuments.useTemplate(paramsTemplateDocument);
-		if (!responseUseTemplate.success) {
-
-			const response = {
-				status: 503,
-				message: responseUseTemplate.message,
-				data: null
-			}
-			return res.status(response.status).json(response);
 		}
 
 		const job = await jobs.queueUseTemplate.add(paramsTemplateDocument);
@@ -65,7 +73,6 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
 			status: 200,
 			message: 'Users successfully',
 			data: {
-				buffer: responseUseTemplate.data?.pdf,
 				job_id: job.id,
 				data: job.data
 			}
@@ -77,6 +84,7 @@ const reportUsers = async (req: Request<any, any, BodyUseReportInterface, any>, 
 
 };
 
+
 export default {
-	reportUsers
+	reportUsers,
 };

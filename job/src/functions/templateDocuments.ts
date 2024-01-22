@@ -16,7 +16,7 @@ import ConvertDocument from '@functions/convertDocuments';
 
 
 interface ParamsUseTemplateInterface {
-   file_url: string;
+   file: string | Buffer;
    data: any
 }
 
@@ -41,6 +41,18 @@ interface PromiseUseTemplateInterface extends ResponseFunctionsInterface {
       pdf: Buffer
    }
 }
+
+
+interface ParamsBufferFileInterface {
+   file: string | Buffer
+}
+
+interface PromiseBufferFileInterface extends ResponseFunctionsInterface {
+   data?: {
+      file: Buffer
+   }
+}
+
 export default class {
 
    private static async setupFolderTemp(): Promise<PromiseSetupFolderTempInterface> {
@@ -121,11 +133,51 @@ export default class {
    }
 
 
+   private static async bufferFile(params: ParamsBufferFileInterface): Promise<PromiseBufferFileInterface>{
+
+      try {
+         const { file } = params
+
+         let bufferFile
+         if (typeof file === 'string') {
+            const paramsGetBufferFile = {
+               url: file
+            }
+            const responsePdfBuffer = await GetBufferFile(paramsGetBufferFile)
+            if (!responsePdfBuffer.success) {
+               return {
+                  success: false,
+                  message: responsePdfBuffer.message
+               }
+            }
+
+            bufferFile = responsePdfBuffer.data?.buffer as Buffer
+         } else {
+            bufferFile = Buffer.from(file)
+         }
+
+
+         return {
+            success: true,
+            data: {
+               file: bufferFile
+            }
+         }
+      } catch (error) {
+         return {
+            success: false,
+            message: 'Ocorreu um erro no arquivo enviado.',
+            error
+         }
+      }
+
+   }
+
    static async useTemplate(params: ParamsUseTemplateInterface): Promise<PromiseUseTemplateInterface>  {
 
       try {
 
-         const { file_url , data} = params;
+         const { file, data } = params;
 
          const fullNamePdfTemplate = 'template.pdf';
 
@@ -139,22 +191,22 @@ export default class {
                }
          }
 
-         const paramsGetBufferFile = {
-            url: file_url
+         const paramsBufferFile = {
+            file
          }
-         const responsePdfBuffer = await GetBufferFile(paramsGetBufferFile)
-         if (!responsePdfBuffer.success) {
+
+         const responseBufferFile = await this.bufferFile(paramsBufferFile)
+         if (!responseBufferFile.success) {
             return {
                success: false,
-               message: responsePdfBuffer.message
+               message: responseBufferFile.message
             }
          }
 
          const sourceTemplate = `${responsePathTemp.data?.path}/`
          const pathFilePdf = `${sourceTemplate + fullNamePdfTemplate}`;
 
-
-         await writeFile(pathFilePdf, responsePdfBuffer.data?.buffer as Buffer);
+         await writeFile(pathFilePdf, responseBufferFile.data?.file as Buffer)
 
          const paramsConvertDocument = {
             input_file: pathFilePdf,
@@ -197,8 +249,8 @@ export default class {
 
          this.rmFolder(paramsRmFolder)
 
-         const minutes = 1
-         await FunctionTest({ minutes })
+         // const minutes = 1
+         // await FunctionTest({ minutes })
 
          return {
             success: true,
