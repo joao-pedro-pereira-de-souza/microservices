@@ -39,10 +39,10 @@ export default  class {
 
 	static execPromise = promisify(exec);
 
-	private static sofficeGetOutput(params: ParamsSofficeGetOutputInterface) : ResponseSofficeGetOutput {
+	private static sofficeGetOutput(params: ParamsSofficeGetOutputInterface, isPdf?: boolean) : ResponseSofficeGetOutput {
 		try {
 			const { stdout } = params;
-			const regex = /(\S+\.xml)\b/;
+			const regex = isPdf && isPdf === true ? /(\S+\.pdf)\b/ : /(\S+\.xml)\b/;
 			const matchStdout = stdout.match(regex);
 
 			const output = matchStdout?.[0];
@@ -133,7 +133,7 @@ export default  class {
 				stdout: responseSoffice.stdout
 			}
 
-			const responseSofficeGetOutput = this.sofficeGetOutput(paramsSofficeGetOutput);
+			const responseSofficeGetOutput = this.sofficeGetOutput(paramsSofficeGetOutput, true);
 			if (!responseSofficeGetOutput.success) {
 				return {
 					success: false,
@@ -144,7 +144,6 @@ export default  class {
 
 			const sourceFilePdf = responseSofficeGetOutput?.data?.output as string
 			const filePdf = readFileSync(sourceFilePdf);
-
 			return {
 				success: true,
 				data: {

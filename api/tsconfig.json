@@ -44,6 +44,7 @@
       "@validations/*": ["src/validations/*"],
       "@contents/*": ["src/contents/*"],
       "@jobs/*": ["src/jobs/*"],
+      "@websockets/*": ["src/websockets/*"],
       "@root/*": ["./*"],
     },
     "resolveJsonModule": true,                        /* Enable importing .json files. */
