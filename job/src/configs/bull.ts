@@ -20,7 +20,7 @@ export default {
             queue.process(queueConfigFind.handle)
 
 
-             queue.on('active', () => {
+            queue.on('active', () => {
 
                const message = `O processo ${queueConfigFind.job_name} foi inicializado com sucesso ✅`
                console.log(message);

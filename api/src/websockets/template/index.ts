@@ -1,5 +1,4 @@
 import { type Socket, type Server } from 'socket.io';
-import jobs from '@jobs/index';
 import events from '@contents/webhooks';
 
 

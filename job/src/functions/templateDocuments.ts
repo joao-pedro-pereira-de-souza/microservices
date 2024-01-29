@@ -2,10 +2,9 @@
 
 import { mkdtemp, mkdir } from 'fs/promises';
 import path from 'path';
-
 import { writeFile } from 'fs/promises';
-
 import { rmSync } from 'fs'
+import { Job } from 'bull';
 
 import { ResponseFunctionsInterface } from '@interfaces/responses';
 
@@ -17,7 +16,7 @@ import ConvertDocument from '@functions/convertDocuments';
 
 interface ParamsUseTemplateInterface {
    file: string | Buffer;
-   data: any
+   data: any;
 }
 
 interface PromiseSetupFolderTempInterface extends ResponseFunctionsInterface {
@@ -182,6 +181,7 @@ export default class {
          const fullNamePdfTemplate = 'template.pdf';
 
          const responsePathTemp = await this.setupFolderTemp();
+
          if (!responsePathTemp.success) {
                const { success, message, error} = responsePathTemp;
                return {
@@ -196,6 +196,7 @@ export default class {
          }
 
          const responseBufferFile = await this.bufferFile(paramsBufferFile)
+
          if (!responseBufferFile.success) {
             return {
                success: false,
@@ -236,6 +237,7 @@ export default class {
          }
 
          const responseConvertXmlToPdf = await ConvertDocument.convertXmlToPdf(paramsConvertDocumentXmlToPdf);
+
          if (!responseConvertXmlToPdf.success) {
             return {
                success: false,
@@ -248,7 +250,6 @@ export default class {
          }
 
          this.rmFolder(paramsRmFolder)
-
          // const minutes = 1
          // await FunctionTest({ minutes })
 

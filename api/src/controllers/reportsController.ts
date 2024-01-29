@@ -19,11 +19,11 @@ const reportUsers = async (req: Request<any, any, any, any>, res: Response, next
 
 
 
-		// const dataValidation = req.body;
-      // const responseValidation = await validate(UseReportSchema, dataValidation);
-      // if (responseValidation.notSuccess) {
-      //    return res.status(422).json(responseValidation.response);
-      // }
+		const dataValidation = req.body;
+      const responseValidation = await validate(UseReportSchema, dataValidation);
+      if (responseValidation.notSuccess) {
+         return res.status(422).json(responseValidation.response);
+      }
 
 		let file: string | Buffer | null = null;
 
