@@ -17,8 +17,6 @@ const reportUsers = async (req: Request<any, any, any, any>, res: Response, next
 
 		const data_parse = req.body?.data ? JSON.parse(req.body.data) : null;
 
-
-
 		const dataValidation = req.body;
       const responseValidation = await validate(UseReportSchema, dataValidation);
       if (responseValidation.notSuccess) {

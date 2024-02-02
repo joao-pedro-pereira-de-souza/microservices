@@ -2,9 +2,9 @@ import path from 'path';
 import multer from 'multer';
 
 
-export const dirUploads = path.resolve(__dirname, '../', '../', 'uploads')
+export const dirUploads = path.resolve(__dirname, '../', '../', 'uploads');
 
-const filesAutorized = ['application/pdf']
+const filesAutorized = ['application/pdf'];
 const storage = multer.diskStorage({
    destination: (req, file, callback) => {
       callback(null, dirUploads)
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
       callback(null, `${now}_${file.originalname}`)
    }
 
-})
+});
 
 
 export default multer({ storage });

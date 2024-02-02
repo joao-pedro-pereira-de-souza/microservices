@@ -7,7 +7,7 @@ import IO from 'socket.io';
 
 import MiddlewareErrors from '@middlewares/erros';
 import WebSocket from '@middlewares/websockets';
-import RateLimit from '@middlewares/ratelimit';
+import MiddlewareRateLimit from '@middlewares/ratelimit';
 
 import Routes from '@routes/index';
 import { dirUploads } from '@configs/multer';
@@ -21,7 +21,7 @@ app.use('/uploads', express.static(dirUploads))
 const http = Http.createServer(app);
 const io = new IO.Server(http)
 
-RateLimit(app);
+MiddlewareRateLimit(app);
 
 Routes(app);
 
