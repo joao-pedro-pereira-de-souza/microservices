@@ -13,7 +13,7 @@ import { UserInterface } from '@schemas/userSchema';
 import { validate } from '@validations/validation';
 
 import { CompareHash, CreateToken } from '@functions/security';
-
+import permissions from '@contents/permissions';
 
 const login = async (req: Request<any, any, BodyLoginInterface, any>, res: Response, next: NextFunction) => {
    try {
@@ -24,12 +24,21 @@ const login = async (req: Request<any, any, BodyLoginInterface, any>, res: Respo
          return res.status(422).json(responseValidation.response);
       }
 
-      const { email, password } = req.body;
+      const { email, password, type_redirect } = req.body;
 
       const whereFindUser = {
-         email: email.toLowerCase(),
+         'u.email': email.toLowerCase(),
       }
-      const user = await knex('users').where(whereFindUser).first() as UserInterface;
+
+      interface userRequest extends UserInterface {
+         number_permission: number
+      }
+      const user = await knex('users AS u')
+         .innerJoin('permissions AS p', 'p.id', 'u.id_permission')
+         .select(['u.*', knex.raw('p.number AS number_permission')])
+         .where(whereFindUser)
+         .first() as userRequest;
+
       if (!user) {
          const response = {
             status: 401,
@@ -63,6 +72,20 @@ const login = async (req: Request<any, any, BodyLoginInterface, any>, res: Respo
       const datauser = Object.fromEntries(
          Object.entries(user).filter(([key]) => !keysRemove.includes(key))
       )
+
+      if (type_redirect && user.number_permission === permissions.MASTER) {
+         const authorizationHeader = `Bearer ${token}`; // Substitua pelo seu token
+         res.set({
+         'Authorization': authorizationHeader
+      })
+
+         // Configurar a nova URL para redirecionamento
+         const novaURL = `${process.env.API_MAIN_URL}/admin/jobs`;
+
+         // Redirecionar o cliente para a nova URL
+         return res.redirect(302, novaURL);
+      }
+
       const dataResponse = {
          token,
          user:datauser

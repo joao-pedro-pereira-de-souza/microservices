@@ -7,10 +7,12 @@ interface ParamsMiddlewareInterface {
    req: any;
    res: Response;
    next: NextFunction;
+   query_token?: string;
 }
 
-async function MiddlewareAuthentication({ numbers_permisson, req, res, next }: ParamsMiddlewareInterface) {
-   const token = req.headers?.authorization;
+async function MiddlewareAuthentication({ numbers_permisson, req, res, next, query_token }: ParamsMiddlewareInterface) {
+   const token = req.headers?.authorization || query_token;
+
    if (!token) {
       const response = {
          status: 401,

@@ -12,11 +12,16 @@ import MiddlewareRateLimit from '@middlewares/ratelimit';
 import Routes from '@routes/index';
 import { dirUploads } from '@configs/multer';
 
+import SetupBullBoard from '@middlewares/bullBoard';
+
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static(dirUploads))
+
+SetupBullBoard(app);
 
 const http = Http.createServer(app);
 const io = new IO.Server(http)

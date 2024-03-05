@@ -23,8 +23,8 @@ const Files = (app: Router) => {
       filesController.upload)
 
 
-      app.delete('/files/uploads',
-       async (req, res, next) => {
+   app.delete('/files/uploads',
+      async (req, res, next) => {
          const params = {
             numbers_permisson: [permissions.MASTER],
             req,
@@ -33,7 +33,7 @@ const Files = (app: Router) => {
          }
          await MiddlewareAuthentication(params);
       },
-      filesController.remove)
+      filesController.remove);
 
 }
 
