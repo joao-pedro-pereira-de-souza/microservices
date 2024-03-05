@@ -25,6 +25,7 @@ module.exports = {
           "@schemas": "./src/schemas",
           "@validations": "./src/validations",
           "@contents": "./src/contents",
+          "@jobs": "./src/jobs",
           "@root": "./",
         },
       },
