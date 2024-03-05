@@ -12,5 +12,9 @@ export const CreateTemplateSchema = z.object({
    deleted_at: z.string().optional(),
 })
 
+export const FindTemplateSchema = z.object({
+   id: z.string()
+})
+
 
 export type CreateTemplateInterface = z.infer<typeof CreateTemplateSchema>

@@ -6,24 +6,36 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/server.ts",
     "build": "npx babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrations:run": "npx knex migrate:latest",
+    "migrations:rollback": "npx knex migrate:rollback --all"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@bull-board/express": "^5.14.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/multer": "^1.4.11",
+    "@types/socket.io": "^3.0.2",
     "axios": "^1.6.3",
+    "bcryptjs": "^2.4.3",
+    "bull": "^4.12.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "html-pdf": "^3.0.1",
     "html-to-pdf": "^0.1.11",
+    "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.3",
+    "redis": "^4.6.12",
+    "socket.io": "^4.7.4",
     "zod": "^3.22.4"
   },
   "devDependencies": {
