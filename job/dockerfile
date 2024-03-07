@@ -1,0 +1,23 @@
+FROM node:16.9.1-alpine
+
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+
+COPY package*.json ./
+
+COPY . .
+
+USER node
+
+RUN npm install -f
+
+RUN npm run build
+
+COPY . ./dist
+
+COPY --chown=node:node . .
+
+EXPOSE 8181
+
+CMD [ "npm", "start" ]

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/server.ts",
     "build": "npx babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrations:run": "npx knex migrate:latest",
     "migrations:rollback": "npx knex migrate:rollback --all"

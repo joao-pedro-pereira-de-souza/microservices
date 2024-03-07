@@ -11,3 +11,5 @@ scriptDockerDatabaseTest.txt
 job/node_modules/*
 job/dist/*
 job/.env
+
+/.env

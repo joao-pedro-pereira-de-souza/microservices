@@ -1,9 +1,5 @@
 import { Router } from 'express';
 
-
-import permissions from '@contents/permissions';
-import MiddlewareAuthentication from '@functions/middlewareAuthentication';
-
 import ReportsController from '@controllers/reportsController';
 import Multer from 'multer';
 

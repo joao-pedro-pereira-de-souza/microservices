@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/dat"
+  redis:
+    image: redis:latest
+    container_name: redis-cache
+    environment:
+      REDIS_PASSWORD: ${DB_REDIS_PASSWORD}
+    ports:
+      - "${DB_REDIS_PORT}:6379"
+
+  jobs:
+    build: ./job
+    env_file: .env
+    command: "npm start"
+    working_dir: /home/node/app
+    expose:
+      - "8181"
+    ports:
+      - "8181:8181"
+    depends_on:
+      - database
+      - redis
+
+  api:
+    build: ./api
+    env_file: .env
+    command: "npm start"
+    working_dir: /home/node/app
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+      - redis
+volumes:
+  postgres-data:
